@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "marketlens"
+version = "0.1.0"
+description = "End-to-end financial market data pipeline: DuckDB + dbt + Polars + Prefect + Streamlit"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "polars>=0.20",
+    "duckdb>=0.10",
+    "dbt-duckdb>=1.7",
+    "prefect>=2.16",
+    "yfinance>=0.2",
+    "pandas-datareader>=0.10",
+    "pydantic-settings>=2.0",
+    "loguru>=0.7",
+    "streamlit>=1.32",
+    "plotly>=5.20",
+    "scipy>=1.12",
+    "pandas>=2.0",
+    "requests>=2.31",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-mock>=3.12",
+    "ruff>=0.4",
+    "mypy>=1.9",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["marketlens*", "dashboard*"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["B008"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["network: requires live network access (deselect with -m 'not network')"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = false
+ignore_missing_imports = true
