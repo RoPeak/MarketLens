@@ -1,0 +1,47 @@
+version: 2
+
+models:
+  - name: stg_equities
+    description: "Equity OHLCV data from Yahoo Finance, filtered from silver_prices."
+    columns:
+      - name: symbol
+        tests: [not_null]
+      - name: date
+        tests: [not_null]
+      - name: close
+        tests: [not_null]
+      - name: asset_class
+        tests:
+          - accepted_values:
+              arguments:
+                values: ["equity"]
+
+  - name: stg_crypto
+    description: "Cryptocurrency OHLC data from CoinGecko, filtered from silver_prices."
+    columns:
+      - name: symbol
+        tests: [not_null]
+      - name: date
+        tests: [not_null]
+      - name: close
+        tests: [not_null]
+      - name: asset_class
+        tests:
+          - accepted_values:
+              arguments:
+                values: ["crypto"]
+
+  - name: stg_macro
+    description: "Macroeconomic indicator series from FRED, filtered from silver_prices."
+    columns:
+      - name: symbol
+        tests: [not_null]
+      - name: date
+        tests: [not_null]
+      - name: close
+        tests: [not_null]
+      - name: asset_class
+        tests:
+          - accepted_values:
+              arguments:
+                values: ["macro"]

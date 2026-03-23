@@ -1,0 +1,9 @@
+marketlens:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      # Path is relative to where `dbt` is invoked (the dbt/ directory).
+      # Run dbt from the project root via `make dbt-run` which does: cd dbt && dbt run
+      path: "../data/marketlens.duckdb"
+      threads: 4

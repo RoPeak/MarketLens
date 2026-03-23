@@ -35,15 +35,20 @@ transform:
 	python scripts/run_transforms.py
 
 # --- dbt ---
+# dbt.exe location varies; fall back to PATH if not found at the pip install location
+DBT ?= dbt
+
+dbt-deps:
+	cd dbt && $(DBT) deps
 
 dbt-run:
-	cd dbt && dbt run
+	cd dbt && $(DBT) run
 
 dbt-test:
-	cd dbt && dbt test
+	cd dbt && $(DBT) test
 
 dbt-docs:
-	cd dbt && dbt docs generate && dbt docs serve
+	cd dbt && $(DBT) docs generate && $(DBT) docs serve
 
 # --- Dashboard ---
 

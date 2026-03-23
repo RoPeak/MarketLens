@@ -1,0 +1,28 @@
+version: 2
+
+sources:
+  - name: marketlens
+    description: "MarketLens pipeline tables written by the Python ingestion and Silver transform layers."
+    schema: main
+    tables:
+      - name: silver_prices
+        description: "Cleaned, normalized, and enriched price data for all assets (Silver layer)."
+        columns:
+          - name: symbol
+            description: "Asset ticker or series ID."
+          - name: asset_class
+            description: "One of: equity, crypto, macro."
+          - name: date
+            description: "Trading or observation date."
+          - name: close
+            description: "Closing price or indicator value."
+          - name: daily_return
+            description: "Percentage change from previous close: (close_t - close_{t-1}) / close_{t-1}."
+          - name: log_return
+            description: "Continuously compounded return: ln(close_t / close_{t-1})."
+          - name: rolling_vol_30d
+            description: "Annualised 30-day rolling standard deviation of log returns."
+          - name: rolling_vol_90d
+            description: "Annualised 90-day rolling standard deviation of log returns."
+          - name: is_outlier
+            description: "True if the close value is a suspected data error (MAD-based z-score)."

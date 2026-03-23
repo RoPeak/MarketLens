@@ -1,0 +1,60 @@
+version: 2
+
+models:
+  - name: mart_daily_returns
+    description: >
+      Unified daily and log returns for all equities and crypto assets,
+      with a cumulative return index. Long format: one row per (date, symbol).
+    columns:
+      - name: date
+        tests: [not_null]
+      - name: symbol
+        tests: [not_null]
+      - name: close
+        tests: [not_null]
+      - name: daily_return
+        tests: [not_null]
+      - name: cumulative_return
+        tests: [not_null]
+
+  - name: mart_volatility
+    description: >
+      Rolling realised volatility (30d, 90d) and Garman-Klass vol for equities
+      and crypto. Includes a vol-regime ratio (30d/90d) as a risk indicator.
+    columns:
+      - name: symbol
+        tests: [not_null]
+      - name: date
+        tests: [not_null]
+
+  - name: mart_correlations
+    description: >
+      90-day and 30-day rolling Pearson correlations between all unique asset pairs.
+      Long format: one row per (date, symbol_a, symbol_b).
+    columns:
+      - name: date
+        tests: [not_null]
+      - name: symbol_a
+        tests: [not_null]
+      - name: symbol_b
+        tests: [not_null]
+
+  - name: mart_technical_indicators
+    description: >
+      RSI-14, MACD (12/26/9 SMA), and Bollinger Bands (20, ±2σ) for equities
+      and crypto. Includes pre-computed signal labels.
+    columns:
+      - name: symbol
+        tests: [not_null]
+      - name: date
+        tests: [not_null]
+      - name: rsi_signal
+        tests:
+          - accepted_values:
+              arguments:
+                values: ["overbought", "oversold", "neutral"]
+      - name: macd_signal_direction
+        tests:
+          - accepted_values:
+              arguments:
+                values: ["bullish", "bearish", "neutral"]
