@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     # Assets to track
     yfinance_tickers: list[str] = ["SPY", "QQQ", "GLD", "TLT", "IWM"]
     crypto_ids: list[str] = ["bitcoin", "ethereum", "solana"]
-    macro_series: list[str] = ["DGS10", "FEDFUNDS", "DPCCRV"]
+    macro_series: list[str] = ["DGS10", "FEDFUNDS", "UNRATE"]
 
     # How far back to ingest on first run
     lookback_days: int = 730
