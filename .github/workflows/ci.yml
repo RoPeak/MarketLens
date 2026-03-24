@@ -9,17 +9,14 @@ on:
 jobs:
   lint-and-test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.12"]
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "3.12"
           cache: pip
 
       - name: Install dependencies
@@ -35,20 +32,15 @@ jobs:
         run: ruff format --check .
 
       # -------------------------------------------------------------------
-      # Type check
-      # -------------------------------------------------------------------
-      - name: Type check (mypy)
-        run: mypy marketlens/
-        continue-on-error: true   # informational only — strict mypy not enforced yet
-
-      # -------------------------------------------------------------------
       # Unit tests (no network)
       # -------------------------------------------------------------------
       - name: Test
         run: pytest tests/ -v --tb=short -m "not network"
 
       # -------------------------------------------------------------------
-      # dbt compile (validates SQL without executing it)
+      # dbt compile — validates all SQL models without executing them.
+      # DBT_DUCKDB_PATH points to /tmp so dbt-duckdb can create the file;
+      # the data/ directory is not present in the CI workspace.
       # -------------------------------------------------------------------
       - name: dbt compile
         working-directory: dbt
@@ -56,5 +48,4 @@ jobs:
           dbt deps
           dbt compile
         env:
-          # dbt needs a DuckDB file to compile against; use a temp in-memory path
           DBT_DUCKDB_PATH: /tmp/ci_marketlens.duckdb
