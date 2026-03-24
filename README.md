@@ -1,6 +1,6 @@
 # MarketLens
 
-[![CI](https://github.com/your-username/marketlens/actions/workflows/ci.yml/badge.svg)](https://github.com/your-username/marketlens/actions/workflows/ci.yml)
+[![CI](https://github.com/RoPeak/marketlens/actions/workflows/ci.yml/badge.svg)](https://github.com/RoPeak/marketlens/actions/workflows/ci.yml)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![dbt](https://img.shields.io/badge/dbt-duckdb-orange.svg)](https://github.com/duckdb/dbt-duckdb)
 [![Polars](https://img.shields.io/badge/dataframes-polars-blue.svg)](https://pola.rs/)
@@ -18,6 +18,7 @@ it through a three-layer medallion architecture, and surfaces analytics in an in
 Streamlit dashboard — all running locally with a single `docker compose up`.
 
 **Highlights:**
+
 - **Polars** window functions for fast, idiomatic Silver-layer transforms
 - **dbt** Gold models: rolling vol, Pearson correlations, RSI-14, MACD, and Bollinger Bands — all in SQL
 - **DuckDB** as the embedded OLAP warehouse — no server, no config, just a file
@@ -67,17 +68,17 @@ For a detailed walkthrough, see [docs/architecture.md](docs/architecture.md).
 
 ## Tech Stack
 
-| Layer | Tool | Why |
-|---|---|---|
-| Data processing | [Polars](https://pola.rs/) | Faster than pandas; `.over()` window idiom is cleaner than groupby |
-| Data warehouse | [DuckDB](https://duckdb.org/) | Embedded OLAP — no server, zero infra, fast analytical queries |
-| SQL transforms | [dbt-duckdb](https://github.com/duckdb/dbt-duckdb) | Most in-demand data engineering tool; lineage graph, tests, docs |
-| Orchestration | [Prefect 3](https://www.prefect.io/) | `flow.serve()` — modern OSS scheduling without Cloud/agents |
-| Dashboard | [Streamlit](https://streamlit.io/) + [Plotly](https://plotly.com/) | Fast interactive analytics UI |
-| Config | [pydantic-settings](https://docs.pydantic.dev/latest/concepts/pydantic_settings/) | Typed `.env` loading |
-| Linting | [ruff](https://github.com/astral-sh/ruff) | Replaces flake8 + isort + pyupgrade |
-| CI | GitHub Actions | Lint → type-check → test → dbt compile |
-| Infra | Docker Compose | Reproducible local deployment |
+| Layer           | Tool                                                                              | Why                                                                |
+| --------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| Data processing | [Polars](https://pola.rs/)                                                        | Faster than pandas; `.over()` window idiom is cleaner than groupby |
+| Data warehouse  | [DuckDB](https://duckdb.org/)                                                     | Embedded OLAP — no server, zero infra, fast analytical queries     |
+| SQL transforms  | [dbt-duckdb](https://github.com/duckdb/dbt-duckdb)                                | Most in-demand data engineering tool; lineage graph, tests, docs   |
+| Orchestration   | [Prefect 3](https://www.prefect.io/)                                              | `flow.serve()` — modern OSS scheduling without Cloud/agents        |
+| Dashboard       | [Streamlit](https://streamlit.io/) + [Plotly](https://plotly.com/)                | Fast interactive analytics UI                                      |
+| Config          | [pydantic-settings](https://docs.pydantic.dev/latest/concepts/pydantic_settings/) | Typed `.env` loading                                               |
+| Linting         | [ruff](https://github.com/astral-sh/ruff)                                         | Replaces flake8 + isort + pyupgrade                                |
+| CI              | GitHub Actions                                                                    | Lint → type-check → test → dbt compile                             |
+| Infra           | Docker Compose                                                                    | Reproducible local deployment                                      |
 
 ---
 
@@ -86,7 +87,7 @@ For a detailed walkthrough, see [docs/architecture.md](docs/architecture.md).
 ### Option A — Docker (zero setup)
 
 ```bash
-git clone https://github.com/your-username/marketlens.git
+git clone https://github.com/RoPeak/marketlens.git
 cd marketlens
 cp .env.example .env
 
@@ -103,13 +104,14 @@ docker compose up dashboard
 **Prerequisites:** Python 3.12+, `pip`
 
 ```bash
-git clone https://github.com/your-username/marketlens.git
+git clone https://github.com/RoPeak/marketlens.git
 cd marketlens
 make install       # pip install -e ".[dev]"
 cp .env.example .env
 ```
 
 **With live data (requires internet):**
+
 ```bash
 make bootstrap     # create DuckDB schema
 make pipeline      # ingest → transform → dbt run + test
@@ -117,6 +119,7 @@ make dashboard     # open http://localhost:8501
 ```
 
 **With synthetic demo data (no internet needed):**
+
 ```bash
 make bootstrap
 python scripts/seed_sample_data.py   # generates 2 years of GBM prices
@@ -141,20 +144,23 @@ prefect server start   # http://localhost:4200
 
 ## Dashboard Pages
 
-| Page | Description |
-|---|---|
+| Page               | Description                                                                         |
+| ------------------ | ----------------------------------------------------------------------------------- |
 | **Price Explorer** | Multi-symbol normalised cumulative returns, OHLCV candlestick, return distributions |
-| **Volatility** | Rolling 30d/90d realised vol, Garman-Klass estimator, monthly regime heatmap |
-| **Correlations** | Rolling Pearson correlation matrix, Ward-linkage dendrogram, pair time series |
-| **Technicals** | RSI-14, MACD, Bollinger Bands — all computed in dbt SQL window functions |
+| **Volatility**     | Rolling 30d/90d realised vol, Garman-Klass estimator, monthly regime heatmap        |
+| **Correlations**   | Rolling Pearson correlation matrix, Ward-linkage dendrogram, pair time series       |
+| **Technicals**     | RSI-14, MACD, Bollinger Bands — all computed in dbt SQL window functions            |
 
 ### Price Explorer
+
 ![Price Explorer](docs/images/Price-Explorer-Page.png)
 
 ### Volatility Analysis
+
 ![Volatility Analysis](docs/images/Volatility-Analysis-Page.png)
 
 ### Correlation Analysis
+
 ![Correlation Analysis](docs/images/Correlation-Analysis-Page.png)
 
 ---
@@ -191,11 +197,11 @@ marketlens/
 
 All **free, no API keys required**:
 
-| Source | Assets | Library |
-|---|---|---|
-| [Yahoo Finance](https://finance.yahoo.com/) | SPY, QQQ, GLD, TLT, IWM | `yfinance` |
-| [CoinGecko](https://www.coingecko.com/) | BTC, ETH, SOL | `requests` (public endpoint) |
-| [FRED](https://fred.stlouisfed.org/) | 10Y Treasury yield, Fed Funds rate, unemployment rate | `pandas-datareader` |
+| Source                                      | Assets                                                | Library                      |
+| ------------------------------------------- | ----------------------------------------------------- | ---------------------------- |
+| [Yahoo Finance](https://finance.yahoo.com/) | SPY, QQQ, GLD, TLT, IWM                               | `yfinance`                   |
+| [CoinGecko](https://www.coingecko.com/)     | BTC, ETH, SOL                                         | `requests` (public endpoint) |
+| [FRED](https://fred.stlouisfed.org/)        | 10Y Treasury yield, Fed Funds rate, unemployment rate | `pandas-datareader`          |
 
 Configurable via `.env` — see `.env.example`.
 
