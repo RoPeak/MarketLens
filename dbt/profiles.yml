@@ -5,5 +5,5 @@ marketlens:
       type: duckdb
       # Path is relative to where `dbt` is invoked (the dbt/ directory).
       # Run dbt from the project root via `make dbt-run` which does: cd dbt && dbt run
-      path: "../data/marketlens.duckdb"
+      path: "{{ env_var('DBT_DUCKDB_PATH', '../data/marketlens.duckdb') }}"
       threads: 4
