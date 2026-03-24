@@ -1,22 +1,61 @@
 services:
+  # ---------------------------------------------------------------------------
+  # pipeline — runs the Prefect flow scheduler (weekday 06:00 UTC cron)
+  # For a one-shot manual run:
+  #   docker compose run --rm pipeline python -c \
+  #     "from marketlens.flows.pipeline_flow import pipeline; pipeline()"
+  # ---------------------------------------------------------------------------
   pipeline:
     build: .
     command: python marketlens/flows/pipeline_flow.py
     volumes:
-      - ./data:/app/data
+      - marketlens-data:/app/data
     env_file:
       - .env
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import duckdb; duckdb.connect('/app/data/marketlens.duckdb', read_only=True).close()"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
+  # ---------------------------------------------------------------------------
+  # dashboard — Streamlit on :8501
+  # ---------------------------------------------------------------------------
   dashboard:
     build: .
-    command: streamlit run dashboard/app.py --server.port 8501 --server.address 0.0.0.0
+    command: >
+      streamlit run dashboard/app.py
+      --server.port 8501
+      --server.address 0.0.0.0
     ports:
       - "8501:8501"
     volumes:
-      - ./data:/app/data
+      - marketlens-data:/app/data
     env_file:
       - .env
     depends_on:
-      - pipeline
+      pipeline:
+        condition: service_healthy
     restart: unless-stopped
+
+  # ---------------------------------------------------------------------------
+  # seed — one-shot container to load 2 years of sample data (demo only)
+  # Run with:   docker compose run --rm seed
+  # ---------------------------------------------------------------------------
+  seed:
+    build: .
+    command: >
+      sh -c "python scripts/seed_sample_data.py && cd dbt && dbt run"
+    volumes:
+      - marketlens-data:/app/data
+    env_file:
+      - .env
+    profiles:
+      - seed
+
+volumes:
+  marketlens-data:
+    driver: local
