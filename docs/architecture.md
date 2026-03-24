@@ -159,3 +159,23 @@ main_main (schema — dbt materialises here with +schema: main)
 The `main_main` double-prefix occurs because dbt-duckdb appends the `+schema: main`
 config value to the default DuckDB schema name (`main`), producing `main_main`.
 The dashboard queries use `main_main` explicitly.
+
+
+---
+
+## Dashboard Screenshots
+
+### Price Explorer
+Normalised cumulative returns across all assets, OHLCV candlestick, and return distributions.
+
+![Price Explorer](images/Price-Explorer-Page.png)
+
+### Volatility Analysis
+Rolling realised volatility, Garman-Klass estimator comparison, and monthly vol regime heatmap.
+
+![Volatility Analysis](images/Volatility-Analysis-Page.png)
+
+### Correlation Analysis
+Rolling Pearson correlation matrix with hierarchical clustering dendrogram.
+
+![Correlation Analysis](images/Correlation-Analysis-Page.png)

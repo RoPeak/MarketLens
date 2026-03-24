@@ -148,6 +148,15 @@ prefect server start   # http://localhost:4200
 | **Correlations** | Rolling Pearson correlation matrix, Ward-linkage dendrogram, pair time series |
 | **Technicals** | RSI-14, MACD, Bollinger Bands — all computed in dbt SQL window functions |
 
+### Price Explorer
+![Price Explorer](docs/images/Price-Explorer-Page.png)
+
+### Volatility Analysis
+![Volatility Analysis](docs/images/Volatility-Analysis-Page.png)
+
+### Correlation Analysis
+![Correlation Analysis](docs/images/Correlation-Analysis-Page.png)
+
 ---
 
 ## Project Structure

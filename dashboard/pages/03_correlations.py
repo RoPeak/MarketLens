@@ -88,7 +88,7 @@ with col_left:
         "Values closer to +1 (blue) indicate strong positive co-movement; "
         "−1 (red) indicates inverse movement."
     )
-    st.plotly_chart(correlation_heatmap(corr_df), use_container_width=True)
+    st.plotly_chart(correlation_heatmap(corr_df), width="stretch")
 
 with col_right:
     st.subheader("Top Correlations")
@@ -114,7 +114,7 @@ st.caption(
     "Assets that cluster together tend to move more similarly. "
     "Useful for identifying diversification opportunities."
 )
-st.plotly_chart(correlation_dendrogram(corr_df), use_container_width=True)
+st.plotly_chart(correlation_dendrogram(corr_df), width="stretch")
 
 st.divider()
 
@@ -138,7 +138,7 @@ if pair_a and pair_b:
     else:
         st.plotly_chart(
             correlation_timeseries_chart(pair_ts, pair_a, pair_b),
-            use_container_width=True,
+            width="stretch",
         )
 
         with st.expander("Raw data"):

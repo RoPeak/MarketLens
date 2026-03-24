@@ -100,7 +100,7 @@ st.caption(
     "Realised volatility computed as the annualised standard deviation of daily log returns "
     f"over a {vol_window} rolling window. Higher values indicate more uncertain price action."
 )
-st.plotly_chart(volatility_timeseries(vol_df, vol_col=vol_col), use_container_width=True)
+st.plotly_chart(volatility_timeseries(vol_df, vol_col=vol_col), width="stretch")
 
 # Summary table
 with st.expander("Summary statistics"):
@@ -135,7 +135,7 @@ if detail_symbol:
     else:
         st.plotly_chart(
             volatility_calendar_heatmap(detail_vol, detail_symbol),
-            use_container_width=True,
+            width="stretch",
         )
 
     st.divider()
@@ -156,5 +156,5 @@ if detail_symbol:
     else:
         st.plotly_chart(
             garman_klass_vs_realised(detail_all, detail_symbol),
-            use_container_width=True,
+            width="stretch",
         )

@@ -74,7 +74,7 @@ if df_display.empty:
     st.warning(f"All RSI values are null for {symbol} — not enough price history.")
     st.stop()
 
-st.plotly_chart(technical_indicators_chart(df_display, symbol), use_container_width=True)
+st.plotly_chart(technical_indicators_chart(df_display, symbol), width="stretch")
 
 # ---------------------------------------------------------------------------
 # Indicator explainer
@@ -117,7 +117,7 @@ with col2:
         st.metric("RSI-14", "—")
 with col3:
     macd = latest.get("macd_line")
-    signal = latest.get("signal_line")
+    signal = latest.get("macd_signal")
     if macd is not None and signal is not None:
         crossover = "Bullish" if macd > signal else "Bearish"
         st.metric("MACD", f"{macd:.4f}", delta=crossover)

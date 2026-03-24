@@ -493,7 +493,7 @@ def technical_indicators_chart(df: pd.DataFrame, symbol: str) -> go.Figure:
 
     Expects columns from mart_technical_indicators:
     date, close, bb_upper, bb_middle, bb_lower, rsi_14,
-    macd_line, signal_line, macd_histogram.
+    macd_line, macd_signal, macd_histogram.
     """
     fig = make_subplots(
         rows=4,
@@ -615,7 +615,7 @@ def technical_indicators_chart(df: pd.DataFrame, symbol: str) -> go.Figure:
         fig.add_trace(
             go.Scatter(
                 x=df["date"],
-                y=df["signal_line"],
+                y=df["macd_signal"],
                 name="Signal",
                 line={"color": "#DD8452", "width": 1.5, "dash": "dot"},
                 hovertemplate="%{x|%Y-%m-%d}<br>Signal: %{y:.4f}<extra></extra>",

@@ -98,7 +98,7 @@ st.caption(
 if "cumulative_return" not in returns_df.columns:
     st.error("Column `cumulative_return` not found. Ensure dbt Gold tables are up to date.")
 else:
-    st.plotly_chart(normalised_price_chart(returns_df), use_container_width=True)
+    st.plotly_chart(normalised_price_chart(returns_df), width="stretch")
 
 # --- Section 2: Return statistics table ---
 with st.expander("Summary statistics"):
@@ -120,7 +120,7 @@ st.divider()
 
 # --- Section 3: Daily return distribution ---
 st.subheader("Daily Return Distribution")
-st.plotly_chart(daily_returns_distribution(returns_df), use_container_width=True)
+st.plotly_chart(daily_returns_distribution(returns_df), width="stretch")
 
 st.divider()
 
@@ -133,4 +133,4 @@ if candle_symbol:
     if ohlcv_df.empty:
         st.warning(f"No OHLCV data found for {candle_symbol} in the selected date range.")
     else:
-        st.plotly_chart(candlestick_chart(ohlcv_df, candle_symbol), use_container_width=True)
+        st.plotly_chart(candlestick_chart(ohlcv_df, candle_symbol), width="stretch")
