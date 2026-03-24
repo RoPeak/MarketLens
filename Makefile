@@ -1,4 +1,4 @@
-.PHONY: install lint format test ingest transform dbt-run dbt-test dbt-docs dashboard pipeline
+.PHONY: install lint format test ingest transform dbt-run dbt-test dbt-docs dashboard flows pipeline
 
 # --- Setup ---
 
@@ -54,6 +54,11 @@ dbt-docs:
 
 dashboard:
 	streamlit run dashboard/app.py --server.port 8501
+
+# --- Prefect orchestration ---
+
+flows:
+	python marketlens/flows/pipeline_flow.py
 
 # --- Full pipeline (manual one-shot) ---
 
