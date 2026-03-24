@@ -14,8 +14,16 @@ from plotly.subplots import make_subplots
 
 # Colour palette — consistent across all pages
 _PALETTE = [
-    "#4C72B0", "#DD8452", "#55A868", "#C44E52", "#8172B3",
-    "#937860", "#DA8BC3", "#8C8C8C", "#CCB974", "#64B5CD",
+    "#4C72B0",
+    "#DD8452",
+    "#55A868",
+    "#C44E52",
+    "#8172B3",
+    "#937860",
+    "#DA8BC3",
+    "#8C8C8C",
+    "#CCB974",
+    "#64B5CD",
 ]
 
 
@@ -203,8 +211,20 @@ def volatility_calendar_heatmap(df: pd.DataFrame, symbol: str) -> go.Figure:
     pivot = sub.groupby(["year", "month"])["rolling_vol_30d"].mean().unstack(fill_value=None)
     pivot = pivot * 100  # as %
 
-    month_labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    month_labels = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+    ]
     x_labels = [month_labels[m - 1] for m in pivot.columns]
     y_labels = [str(y) for y in pivot.index]
     z_values = pivot.values.tolist()
@@ -389,8 +409,14 @@ def correlation_dendrogram(df: pd.DataFrame) -> go.Figure:
         from scipy.spatial.distance import squareform
     except ImportError:
         fig = go.Figure()
-        fig.add_annotation(text="scipy not installed — dendrogram unavailable",
-                           xref="paper", yref="paper", x=0.5, y=0.5, showarrow=False)
+        fig.add_annotation(
+            text="scipy not installed — dendrogram unavailable",
+            xref="paper",
+            yref="paper",
+            x=0.5,
+            y=0.5,
+            showarrow=False,
+        )
         return fig
 
     symbols = sorted(set(df["symbol_a"].tolist() + df["symbol_b"].tolist()))
@@ -398,8 +424,14 @@ def correlation_dendrogram(df: pd.DataFrame) -> go.Figure:
 
     if n < 3:
         fig = go.Figure()
-        fig.add_annotation(text="Need at least 3 symbols for a dendrogram",
-                           xref="paper", yref="paper", x=0.5, y=0.5, showarrow=False)
+        fig.add_annotation(
+            text="Need at least 3 symbols for a dendrogram",
+            xref="paper",
+            yref="paper",
+            x=0.5,
+            y=0.5,
+            showarrow=False,
+        )
         return fig
 
     idx = {s: i for i, s in enumerate(symbols)}
@@ -476,49 +508,63 @@ def technical_indicators_chart(df: pd.DataFrame, symbol: str) -> go.Figure:
     if "bb_upper" in df.columns:
         fig.add_trace(
             go.Scatter(
-                x=df["date"], y=df["bb_upper"],
-                name="BB Upper", line={"color": "rgba(100,150,200,0.4)", "width": 1},
+                x=df["date"],
+                y=df["bb_upper"],
+                name="BB Upper",
+                line={"color": "rgba(100,150,200,0.4)", "width": 1},
                 showlegend=False,
             ),
-            row=1, col=1,
+            row=1,
+            col=1,
         )
         fig.add_trace(
             go.Scatter(
-                x=df["date"], y=df["bb_lower"],
-                name="BB Lower", fill="tonexty",
+                x=df["date"],
+                y=df["bb_lower"],
+                name="BB Lower",
+                fill="tonexty",
                 fillcolor="rgba(100,150,200,0.1)",
                 line={"color": "rgba(100,150,200,0.4)", "width": 1},
                 showlegend=False,
             ),
-            row=1, col=1,
+            row=1,
+            col=1,
         )
     if "bb_middle" in df.columns:
         fig.add_trace(
             go.Scatter(
-                x=df["date"], y=df["bb_middle"],
+                x=df["date"],
+                y=df["bb_middle"],
                 name="BB Middle",
                 line={"color": "rgba(100,150,200,0.6)", "width": 1, "dash": "dash"},
                 showlegend=False,
             ),
-            row=1, col=1,
+            row=1,
+            col=1,
         )
     fig.add_trace(
         go.Scatter(
-            x=df["date"], y=df["close"],
-            name=symbol, line={"color": "#333333", "width": 1.8},
+            x=df["date"],
+            y=df["close"],
+            name=symbol,
+            line={"color": "#333333", "width": 1.8},
         ),
-        row=1, col=1,
+        row=1,
+        col=1,
     )
 
     # --- Row 2: BB %B ---
     if "bb_pct_b" in df.columns:
         fig.add_trace(
             go.Scatter(
-                x=df["date"], y=df["bb_pct_b"],
-                name="%B", line={"color": "#8172B3", "width": 1.5},
+                x=df["date"],
+                y=df["bb_pct_b"],
+                name="%B",
+                line={"color": "#8172B3", "width": 1.5},
                 hovertemplate="%{x|%Y-%m-%d}<br>%%B: %{y:.2f}<extra></extra>",
             ),
-            row=2, col=1,
+            row=2,
+            col=1,
         )
         fig.add_hline(y=1.0, line_dash="dot", line_color="red", line_width=1, row=2, col=1)
         fig.add_hline(y=0.0, line_dash="dot", line_color="green", line_width=1, row=2, col=1)
@@ -528,11 +574,14 @@ def technical_indicators_chart(df: pd.DataFrame, symbol: str) -> go.Figure:
     if "rsi_14" in df.columns:
         fig.add_trace(
             go.Scatter(
-                x=df["date"], y=df["rsi_14"],
-                name="RSI-14", line={"color": "#C44E52", "width": 1.8},
+                x=df["date"],
+                y=df["rsi_14"],
+                name="RSI-14",
+                line={"color": "#C44E52", "width": 1.8},
                 hovertemplate="%{x|%Y-%m-%d}<br>RSI: %{y:.1f}<extra></extra>",
             ),
-            row=3, col=1,
+            row=3,
+            col=1,
         )
         fig.add_hline(y=70, line_dash="dot", line_color="red", line_width=1, row=3, col=1)
         fig.add_hline(y=30, line_dash="dot", line_color="green", line_width=1, row=3, col=1)
@@ -540,31 +589,39 @@ def technical_indicators_chart(df: pd.DataFrame, symbol: str) -> go.Figure:
 
     # --- Row 4: MACD ---
     if "macd_line" in df.columns:
-        hist_colours = np.where(
-            df["macd_histogram"].fillna(0) >= 0, "#26a69a", "#ef5350"
-        )
+        hist_colours = np.where(df["macd_histogram"].fillna(0) >= 0, "#26a69a", "#ef5350")
         fig.add_trace(
             go.Bar(
-                x=df["date"], y=df["macd_histogram"],
-                name="Histogram", marker_color=hist_colours, showlegend=False,
+                x=df["date"],
+                y=df["macd_histogram"],
+                name="Histogram",
+                marker_color=hist_colours,
+                showlegend=False,
             ),
-            row=4, col=1,
+            row=4,
+            col=1,
         )
         fig.add_trace(
             go.Scatter(
-                x=df["date"], y=df["macd_line"],
-                name="MACD", line={"color": "#4C72B0", "width": 1.5},
+                x=df["date"],
+                y=df["macd_line"],
+                name="MACD",
+                line={"color": "#4C72B0", "width": 1.5},
                 hovertemplate="%{x|%Y-%m-%d}<br>MACD: %{y:.4f}<extra></extra>",
             ),
-            row=4, col=1,
+            row=4,
+            col=1,
         )
         fig.add_trace(
             go.Scatter(
-                x=df["date"], y=df["signal_line"],
-                name="Signal", line={"color": "#DD8452", "width": 1.5, "dash": "dot"},
+                x=df["date"],
+                y=df["signal_line"],
+                name="Signal",
+                line={"color": "#DD8452", "width": 1.5, "dash": "dot"},
                 hovertemplate="%{x|%Y-%m-%d}<br>Signal: %{y:.4f}<extra></extra>",
             ),
-            row=4, col=1,
+            row=4,
+            col=1,
         )
         fig.update_yaxes(title_text="MACD", row=4, col=1)
 

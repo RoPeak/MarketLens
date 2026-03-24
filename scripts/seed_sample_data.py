@@ -56,9 +56,9 @@ _CRYPTO_SEEDS: dict[str, tuple[float, float]] = {
 }
 
 _MACRO_SEEDS: dict[str, float] = {
-    "DGS10": 3.5,   # 10-Year Treasury yield (%)
+    "DGS10": 3.5,  # 10-Year Treasury yield (%)
     "FEDFUNDS": 4.5,  # Federal funds rate (%)
-    "UNRATE": 3.8,    # Unemployment rate (%)
+    "UNRATE": 3.8,  # Unemployment rate (%)
 }
 
 
@@ -103,15 +103,17 @@ def _gbm_ohlcv(
         low = close - intraday_range * rng.uniform(0.3, 1.0)
         open_ = low + (high - low) * rng.uniform(0.1, 0.9)
         volume = max(0, rng.lognormvariate(15, 1))  # log-normal around ~3.3M
-        rows.append({
-            "symbol": symbol,
-            "date": d,
-            "open": round(open_, 4),
-            "high": round(high, 4),
-            "low": round(low, 4),
-            "close": round(close, 4),
-            "volume": round(volume),
-        })
+        rows.append(
+            {
+                "symbol": symbol,
+                "date": d,
+                "open": round(open_, 4),
+                "high": round(high, 4),
+                "low": round(low, 4),
+                "close": round(close, 4),
+                "volume": round(volume),
+            }
+        )
 
     return pl.DataFrame(rows).with_columns(pl.col("date").cast(pl.Date))
 
@@ -131,15 +133,17 @@ def _macro_series(
         shock = rng.gauss(0, daily_vol)
         values.append(max(0.01, values[-1] + drift + shock))
 
-    return pl.DataFrame({
-        "symbol": symbol,
-        "date": dates,
-        "close": [round(v, 4) for v in values],
-        "open": None,
-        "high": None,
-        "low": None,
-        "volume": None,
-    }).with_columns(pl.col("date").cast(pl.Date))
+    return pl.DataFrame(
+        {
+            "symbol": symbol,
+            "date": dates,
+            "close": [round(v, 4) for v in values],
+            "open": None,
+            "high": None,
+            "low": None,
+            "volume": None,
+        }
+    ).with_columns(pl.col("date").cast(pl.Date))
 
 
 # ---------------------------------------------------------------------------
@@ -151,10 +155,12 @@ _BRONZE_COLS = ["source", "symbol", "date", "open", "high", "low", "close", "vol
 
 def _upsert_bronze(conn, table: str, df: pl.DataFrame, source: str) -> int:
     now = datetime.now(tz=UTC)
-    df = df.with_columns([
-        pl.lit(source).alias("source"),
-        pl.lit(now).alias("ingested_at"),
-    ]).select(_BRONZE_COLS)
+    df = df.with_columns(
+        [
+            pl.lit(source).alias("source"),
+            pl.lit(now).alias("ingested_at"),
+        ]
+    ).select(_BRONZE_COLS)
     conn.register("_seed_batch", df)
     cols = ", ".join(_BRONZE_COLS)
     conn.execute(  # noqa: S608
@@ -166,9 +172,19 @@ def _upsert_bronze(conn, table: str, df: pl.DataFrame, source: str) -> int:
 
 def _upsert_silver(conn, df: pl.DataFrame) -> int:
     silver_cols = [
-        "source", "symbol", "asset_class", "date",
-        "open", "high", "low", "close", "volume",
-        "daily_return", "log_return", "is_outlier", "transformed_at",
+        "source",
+        "symbol",
+        "asset_class",
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume",
+        "daily_return",
+        "log_return",
+        "is_outlier",
+        "transformed_at",
     ]
     now = datetime.now(tz=UTC)
     df = df.with_columns(pl.lit(now).alias("transformed_at"))
@@ -184,6 +200,7 @@ def _upsert_silver(conn, df: pl.DataFrame) -> int:
 # ---------------------------------------------------------------------------
 # Main seeding routine
 # ---------------------------------------------------------------------------
+
 
 def seed(lookback_days: int = 730) -> None:
     rng = random.Random(42)  # deterministic seed for reproducibility

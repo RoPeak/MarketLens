@@ -206,9 +206,7 @@ def pipeline(lookback_days: int | None = None) -> dict[str, int]:
     dbt_run()
     dbt_test()
 
-    logger.success(
-        f"Pipeline complete — ingest: {ingest_total} rows, silver: {silver_rows} rows"
-    )
+    logger.success(f"Pipeline complete — ingest: {ingest_total} rows, silver: {silver_rows} rows")
     return {"ingest_rows": ingest_total, "silver_rows": silver_rows}
 
 

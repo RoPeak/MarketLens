@@ -73,8 +73,7 @@ corr_df = get_correlations(as_of=as_of_date, window=window)
 
 if corr_df.empty:
     st.warning(
-        "No correlation data found. "
-        "Ensure `mart_correlations` is populated (`make dbt-run`)."
+        "No correlation data found. Ensure `mart_correlations` is populated (`make dbt-run`)."
     )
     st.stop()
 

@@ -35,10 +35,7 @@ with st.sidebar:
 
     # Only equities and crypto have OHLC; macro has no useful technicals
     tradeable = sorted(
-        sym
-        for cls, syms in symbols_by_class.items()
-        if cls in ("equity", "crypto")
-        for sym in syms
+        sym for cls, syms in symbols_by_class.items() if cls in ("equity", "crypto") for sym in syms
     )
     if not tradeable:
         tradeable = sorted(sym for syms in symbols_by_class.values() for sym in syms)
